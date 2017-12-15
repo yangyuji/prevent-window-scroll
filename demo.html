@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <link rel="shortcut icon" href="" type="image/x-icon">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <title>浮动层局部滚动问题</title>
+    <style>
+        .aside,
+        .aside-overlay {
+            position: fixed;
+            top: 0; right: 0; bottom: 0; left: 0;
+        }
+        .aside {
+            -webkit-transition: visibility .25s;
+            transition: visibility .25s;
+            z-index: 3;
+            visibility: hidden;
+            overflow: hidden;
+        }
+        .aside.active {
+            -webkit-transition: none;
+            transition: none;
+            visibility: visible;
+        }
+        .aside-overlay {
+            background-color: black;
+            opacity: 0;
+            -webkit-transition: opacity .25s;
+            transition: opacity .25s;
+        }
+        .active > .aside-overlay {
+            opacity: .6;
+        }
+        .aside .module-footer {
+            position: absolute;
+            left: 0; right: 0; bottom: 0;
+            height: 44px;
+        }
+        .aside .module-footer .btn-primary:only-child {
+            margin-bottom: 12px;
+        }
+        .aside .module-header {
+            position: absolute;
+            left: 0; right: 0; top: 0;
+        }
+        .aside .module-main {
+            position: absolute;
+            left: 0; right: 0;
+            top: 44px; bottom: 44px;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .aside .scrollable {
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .aside-content {
+            position: absolute;
+            bottom: 0; right: 0;
+            background-color: white;
+            -webkit-transition: transform .15s;
+            transition: transform .15s;
+            left: 40px; top: 0;
+            -webkit-transform: translateX(100%);
+            transform: translateX(100%);
+        }
+        .active > .aside-content {
+            -webkit-transform: translate(0%, 0%);
+            transform: translate(0%, 0%);
+        }
+        .module-header {
+            height: 28px;
+            border-top: 16px solid transparent;
+            padding: 0 1rem;
+        }
+        .module-header::after {
+            content: '';
+            display:table;
+            clear:both;
+        }
+        .module-title {
+            display: inline;
+            font-weight: normal;
+        }
+        .module-title::before {
+            content: '';
+            height: 1em; width: 10px;
+            display: inline-block;
+            box-sizing: border-box;
+            border-left: 2px solid red;
+            color: transparent;
+            vertical-align: -.22ex;
+        }
+        .btn-tag {
+            display: inline-block;
+            line-height: 27px;
+            margin: 10px 10px 10px 0;
+            border: 1px solid;
+            border-radius: 99px;
+            padding: 0 10px;
+            font-size: 13px;
+            text-align: center;
+            line-height: 20px;
+            color: gray;
+        }
+        .btn-group {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+            margin-left: auto; margin-right: auto;
+        }
+        .btn-group-cell {
+            display: table-cell;
+            font-size: 100%;
+            font-weight: 400;
+        }
+        .btn-reset,
+        .btn-submit {
+            display: block;
+            text-align: center;
+            line-height: 44px;
+            color: white;
+            font-size: 16px;
+        }
+        .btn-reset {
+            background-color: gray;
+        }
+        .btn-submit {
+            background-color: red;
+        }
+        aside a:hover {
+            text-decoration: none;
+        }
+
+        body {
+            height: 1600px;
+            font-size: 87.5%;
+            margin: 0;
+            line-height: 1.5;
+            color: #333;
+            font-family: Arial, sans-serif;
+        }
+
+        /* 有用的样式代码 */
+        .noscroll,
+        .noscroll body {
+            overflow: hidden;
+        }
+        .noscroll body {
+            position: relative;
+        }
+
+        .current-btn {
+            position: relative;
+            width: 200px;
+            height: 3.43784rem;
+            line-height: 3.43784rem;
+            margin: 0 auto;
+            background-image: linear-gradient(-225deg,#375de6 0%,#08f 100%);
+            color: #fff;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="quan-media-box__content">
+        点击下面的按钮弹出浮动层
+    </div>
+    <div class="quan-media-box__content">
+        点击下面的按钮弹出浮动层
+    </div>
+    <div class="quan-media-box__content">
+        点击下面的按钮弹出浮动层
+    </div>
+    <div class="quan-media-box__content">
+        点击下面的按钮弹出浮动层
+    </div>
+    <div class="quan-media-box__content">
+        点击下面的按钮弹出浮动层
+    </div>
+    <div class="quan-media-box__content">
+        点击下面的按钮弹出浮动层
+    </div>
+    <div class="quan-media-box__content">
+        点击下面的按钮弹出浮动层
+    </div>
+    <div class="quan-media-box__content">
+        点击下面的按钮弹出浮动层
+    </div>
+    <div class="current-btn" id="btn-post">弹出窗口</div>
+    <div class="quan-media-box__content">
+        点击下面的按钮弹出浮动层
+    </div>
+
+<aside id="aside" class="aside">
+    <i class="aside-overlay hideAside"></i>
+    <div class="aside-content">
+        <div class="module module-filter-list">
+            <div class="module-header">
+                <h3 class="module-title">筛选</h3>
+            </div>
+            <div class="module-main scrollable">
+                <ul id="filters" class="sort-ul">
+                    <li class="sort-li">
+                        <h3 class="sort-li-title">属性</h3>
+                        <div class="sort-li-detail">
+                            <a href="javascript:" class="btn-tag">免费</a><a href="javascript:" class="btn-tag">VIP</a>
+                        </div>
+                    </li>
+                    <li class="sort-li">
+                        <h3 class="sort-li-title">字数</h3>
+                        <div class="sort-li-detail">
+                            <a href="javascript:" class="btn-tag">30万以下</a><a href="javascript:" class="btn-tag">30~50万</a><a href="javascript:" class="btn-tag">50~100万</a><a href="javascript:" class="btn-tag">100-200万</a><a href="javascript:" class="btn-tag">200万以上</a>
+                        </div>
+                    </li>
+                    <li class="sort-li">
+                        <h3 class="sort-li-title">状态</h3>
+                        <div class="sort-li-detail">
+                            <a href="javascript:" class="btn-tag">连载</a><a href="javascript:" class="btn-tag">完本</a>
+                        </div>
+                    </li>
+                    <li class="sort-li">
+                        <h3 class="sort-li-title">品质</h3>
+                        <div class="sort-li-detail">
+                            <a href="javascript:" class="btn-tag">签约作品</a><a href="javascript:" class="btn-tag">精品小说</a>
+                        </div>
+                    </li>
+                    <li class="sort-li">
+                        <h3 class="sort-li-title">更新时间</h3>
+                        <div class="sort-li-detail">
+                            <a href="javascript:" class="btn-tag">三日内</a><a href="javascript:" class="btn-tag">七日内</a><a href="javascript:" class="btn-tag">半月内</a><a href="javascript:" class="btn-tag">一月内</a>
+                        </div>
+                    </li>
+                    <li class="sort-li">
+                        <h3 class="sort-li-title">类型</h3>
+                        <div class="sort-li-detail">
+                            <a href="javascript:" class="btn-tag">武侠</a><a href="javascript:" class="btn-tag">仙侠</a><a href="javascript:" class="btn-tag">玄幻</a><a href="javascript:" class="btn-tag">魔幻</a><a href="javascript:" class="btn-tag">都市</a><a href="javascript:" class="btn-tag">校园</a>
+                        </div>
+                    </li>
+                    <li class="sort-li">
+                        <h3 class="sort-li-title">状态</h3>
+                        <div class="sort-li-detail">
+                            <a href="javascript:" class="btn-tag">连载</a><a href="javascript:" class="btn-tag">完本</a>
+                        </div>
+                    </li>
+                    <li class="sort-li">
+                        <h3 class="sort-li-title">品质</h3>
+                        <div class="sort-li-detail">
+                            <a href="javascript:" class="btn-tag">签约作品</a><a href="javascript:" class="btn-tag">精品小说</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="module-footer">
+                <nav class="btn-group">
+                    <div class="btn-group-cell"><a href="javascript:" class="btn-reset hideAside">重置</a></div>
+                    <div class="btn-group-cell"><a href="javascript:" class="btn-submit hideAside">完成</a></div>
+                </nav>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<script src="./noscroll.js"></script>
+<script type="text/javascript">
+    var util = {
+        hasClass: function (e, c) {
+            var re = new RegExp("(^|\\s)" + c + "(\\s|$)");
+            return re.test(e.className);
+        },
+        addClass: function (e, c) {
+            if ( this.hasClass(e, c) ) {
+                return;
+            }
+            var newclass = e.className.split(' ');
+            newclass.push(c);
+            e.className = newclass.join(' ');
+        },
+        removeClass: function (e, c) {
+            if ( !this.hasClass(e, c) ) {
+                return;
+            }
+            var re = new RegExp("(^|\\s)" + c + "(\\s|$)", 'g');
+            e.className = e.className.replace(re, '');
+        },
+        data: function (e, key, val) {
+            if (val) e.dataset.key = val;
+            else return e.dataset.key || null;
+        }
+    };
+
+    document.querySelector('#btn-post').addEventListener('click', function () {
+        util.addClass(document.querySelector('#aside'), 'active');
+        util.addClass(document.querySelector('html'), 'noscroll');
+        nosroll(document.querySelector('#aside'), 'scrollable');
+    });
+
+    document.querySelector('.btn-submit').addEventListener('click', function () {
+        util.removeClass(document.querySelector('#aside'), 'active');
+        util.removeClass(document.querySelector('html'), 'noscroll');
+    });
+
+    document.querySelector('.hideAside').addEventListener('click', function () {
+        util.removeClass(document.querySelector('#aside'), 'active');
+        util.removeClass(document.querySelector('html'), 'noscroll');
+    });
+
+</script>
+
+</body>
+</html>
