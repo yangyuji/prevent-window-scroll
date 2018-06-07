@@ -1,5 +1,8 @@
 # prevent-window-scroll
-浮动层局部滚动时，阻止页面整体滚动
+
+a light script with prevent body scroll when parter scroll, and it has no dependancy.
+
+弹层局部滚动时，阻止页面整体滚动
 
 特点：
 1、无依赖，原生js实现；
