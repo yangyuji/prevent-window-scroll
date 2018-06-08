@@ -63,7 +63,7 @@
             current.posY = e.touches[0].pageY;
             current.scrollY = scroll.scrollTop;
             // 是否可以滚动
-            current.maxscroll = scroll.scrollHeight - scroll.clientHeight;
+            current.maxscroll = scroll.scrollHeight - scroll.offsetHeight;
         }
 
         function touchmove (e) {
