@@ -74,9 +74,6 @@
                 !e.defaultPrevented && e.preventDefault();
             }
 
-            // 垂直滑动距离
-            var distanceY = e.touches[0].pageY - current.posY;
-
             // 不兼容浏览器处理
             if (isBadBrowser) {
                 // current.scroll.scrollTop(current.scrollY - distanceY);
@@ -84,6 +81,8 @@
                 return;
             }
 
+            // 垂直滑动距离
+            var distanceY = e.touches[0].pageY - current.posY;
             // 当前的滚动高度
             var scrollTop = current.scroll.scrollTop;
             // console.log(scrollTop);
