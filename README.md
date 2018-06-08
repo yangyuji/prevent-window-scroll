@@ -1,6 +1,6 @@
 # prevent-window-scroll
 
-a light script with prevent body scroll when parter scroll, and it has no dependancy.
+a light script with prevent body scroll when part scroll, and it has no dependancy.
 
 弹层局部滚动时，阻止页面整体滚动
 

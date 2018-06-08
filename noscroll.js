@@ -20,7 +20,7 @@
             return;
         }
 
-        // 判断和筛选是否是搓浏览器
+        // polyfill，筛选不兼容浏览器
         var isBadBrowser = null;
 
         var current = {
@@ -79,7 +79,7 @@
 
             // 不兼容浏览器处理
             if (isBadBrowser) {
-                current.scroll.scrollTop(current.scrollY - distanceY);
+                // current.scroll.scrollTop(current.scrollY - distanceY);
                 current.scroll.dispatchEvent('scroll');
                 return;
             }
