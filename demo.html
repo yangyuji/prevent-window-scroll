@@ -267,46 +267,21 @@
 
 <script src="./noscroll.js"></script>
 <script type="text/javascript">
-    var util = {
-        hasClass: function (e, c) {
-            var re = new RegExp("(^|\\s)" + c + "(\\s|$)");
-            return re.test(e.className);
-        },
-        addClass: function (e, c) {
-            if ( this.hasClass(e, c) ) {
-                return;
-            }
-            var newclass = e.className.split(' ');
-            newclass.push(c);
-            e.className = newclass.join(' ');
-        },
-        removeClass: function (e, c) {
-            if ( !this.hasClass(e, c) ) {
-                return;
-            }
-            var re = new RegExp("(^|\\s)" + c + "(\\s|$)", 'g');
-            e.className = e.className.replace(re, '');
-        },
-        data: function (e, key, val) {
-            if (val) e.dataset.key = val;
-            else return e.dataset.key || null;
-        }
-    };
 
     document.querySelector('#btn-post').addEventListener('click', function () {
-        util.addClass(document.querySelector('#aside'), 'active');
-        util.addClass(document.querySelector('html'), 'noscroll');
+        document.querySelector('#aside').classList.add('active');
+        document.querySelector('html').classList.add('noscroll');
         nosroll(document.querySelector('#aside'), 'scrollable');
     });
 
     document.querySelector('.btn-submit').addEventListener('click', function () {
-        util.removeClass(document.querySelector('#aside'), 'active');
-        util.removeClass(document.querySelector('html'), 'noscroll');
+        document.querySelector('#aside').classList.remove('active');
+        document.querySelector('html').classList.remove('noscroll');
     });
 
     document.querySelector('.hideAside').addEventListener('click', function () {
-        util.removeClass(document.querySelector('#aside'), 'active');
-        util.removeClass(document.querySelector('html'), 'noscroll');
+        document.querySelector('#aside').classList.remove('active');
+        document.querySelector('html').classList.remove('noscroll');
     });
 
 </script>
